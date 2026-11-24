@@ -1,0 +1,291 @@
+[
+  {
+    "case_no": "TEST-2026-101",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "北京市海淀区人民法院",
+    "case_cause": "民间借贷纠纷",
+    "amount": 80000.0,
+    "claims": "判令被告向原告偿还借款本金人民币80000元及自2025年1月1日起至实际清偿之日止按全国银行间同业拆借中心公布的一年期贷款市场报价利率计算的利息。",
+    "facts": "2024年8月，被告以经营周转为由向原告借款80000元，双方签订借条约定2024年12月31日前归还。借款到期后原告多次催要，被告至今未归还任何款项。",
+    "plaintiff": {
+      "name": "王建国",
+      "idcard": "110108198811220110",
+      "phone": "13801010001",
+      "address": "北京市海淀区知春路128号"
+    },
+    "defendant": {
+      "name": "李秀兰",
+      "idcard": "110105199207150326",
+      "phone": "13902020001",
+      "address": "北京市朝阳区望京西路45号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "周正律师",
+        "idcard": "110101198003154325",
+        "phone": "13703030001",
+        "type": "执业律师",
+        "license_no": "11101202010321098",
+        "work_unit": "北京京师律师事务所",
+        "principals": [
+          "王建国"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-102",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "北京市朝阳区人民法院",
+    "case_cause": "房屋租赁合同纠纷",
+    "amount": 36000.0,
+    "claims": "判令被告支付拖欠的房屋租金人民币36000元，并支付违约金人民币3600元。",
+    "facts": "2024年3月，原被告签订《房屋租赁合同》，约定被告承租原告位于北京市朝阳区的房屋，月租金6000元。被告自2025年1月起连续6个月未支付租金，经原告书面催告后仍未支付。",
+    "plaintiff": {
+      "name": "张伟民",
+      "idcard": "110106197909300533",
+      "phone": "13801010002",
+      "address": "北京市丰台区方庄芳城园一区12号"
+    },
+    "defendant": {
+      "name": "陈晓东",
+      "idcard": "110102198504180747",
+      "phone": "13902020002",
+      "address": "北京市西城区金融街28号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "周正律师",
+        "idcard": "110101198003154325",
+        "phone": "13703030001",
+        "type": "执业律师",
+        "license_no": "11101202010321098",
+        "work_unit": "北京京师律师事务所",
+        "principals": [
+          "张伟民"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-103",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "北京市丰台区人民法院",
+    "case_cause": "机动车交通事故责任纠纷",
+    "amount": 125000.0,
+    "claims": "判令被告赔偿原告医疗费、误工费、护理费、残疾赔偿金等各项损失共计人民币125000元。",
+    "facts": "2025年3月15日，被告驾驶小型客车在北京市丰台区南三环路与骑电动自行车的原告发生碰撞，经交管部门认定被告负事故全部责任。原告因此住院治疗30天，产生各项损失共计125000元，被告拒不赔偿。",
+    "plaintiff": {
+      "name": "刘志强",
+      "idcard": "110114199603250958",
+      "phone": "13801010003",
+      "address": "北京市昌平区回龙观东大街66号"
+    },
+    "defendant": {
+      "name": "赵国庆",
+      "idcard": "110105198206120163",
+      "phone": "13902020003",
+      "address": "北京市朝阳区双井桥东8号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "周正律师",
+        "idcard": "110101198003154325",
+        "phone": "13703030001",
+        "type": "执业律师",
+        "license_no": "11101202010321098",
+        "work_unit": "北京京师律师事务所",
+        "principals": [
+          "刘志强"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-LEGAL-101",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "北京市西城区人民法院",
+    "case_cause": "服务合同纠纷",
+    "amount": 260000.0,
+    "claims": "判令被告向原告支付技术服务费人民币260000元及逾期付款违约金。",
+    "facts": "2024年6月，原告与被告签订《技术服务合同》，约定原告为被告提供数据平台开发服务，合同总价款520000元。原告已按约完成全部开发并交付验收，被告仅支付首付款260000元，余款经多次催要至今未付。",
+    "plaintiff": {
+      "name": "北京恒信数据服务有限公司",
+      "idcard": "91110105MA01XY7K3B",
+      "phone": "13801010004",
+      "address": "北京市朝阳区望京东园四区13号",
+      "litigant_type": "法人",
+      "legal_person": "孙立军",
+      "legal_person_id": "110101197602090453",
+      "registered_address": "北京市朝阳区",
+      "org_type": "有限责任公司"
+    },
+    "defendant": {
+      "name": "周敏",
+      "idcard": "110103199011280214",
+      "phone": "13902020004",
+      "address": "北京市东城区东直门南大街9号",
+      "litigant_type": "自然人"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      },
+      {
+        "name": "法定代表人身份证明",
+        "type": "身份证明",
+        "path": "documents/legal_rep_id.png"
+      },
+      {
+        "name": "营业执照副本",
+        "type": "身份证明",
+        "path": "documents/business_license.png"
+      },
+      {
+        "name": "代理人执业证",
+        "type": "委托书",
+        "path": "documents/agent_license.png"
+      }
+    ],
+    "agents": [
+      {
+        "name": "周正律师",
+        "idcard": "110101198003154325",
+        "phone": "13703030001",
+        "type": "执业律师",
+        "license_no": "11101202010321098",
+        "work_unit": "北京京师律师事务所",
+        "principals": [
+          "北京恒信数据服务有限公司"
+        ]
+      }
+    ]
+  }
+]

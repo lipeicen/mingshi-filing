@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>mock wsla 案由选择</title>
+<style>
+  body { font-family: sans-serif; }
+  .uni-data-tree-dialog { display: none; border: 1px solid #ccc; padding: 10px; width: 480px; }
+  .uni-data-tree-dialog.open { display: block; }
+  .fd-picker-list .fd-item { padding: 6px; cursor: pointer; }
+  .fd-picker-list .fd-item:hover { background: #eaf4ff; }
+  .selected-area.placeholder { color: #999; }
+  .fd-search-container input { width: 200px; }
+</style>
+</head>
+<body>
+<uni-app>
+  <uni-view class="fd-com-article"><uni-view class="fd-com-article-title">立案案由</uni-view></uni-view>
+  <uni-view class="uni-data-tree">
+    <uni-view class="uni-data-tree-input">
+      <uni-view class="input-value input-value-border">
+        <uni-view class="selected-area placeholder">请选择</uni-view>
+        <uni-view class="arrow-area"><uni-view class="input-arrow"></uni-view></uni-view>
+      </uni-view>
+    </uni-view>
+  </uni-view>
+  <uni-button type="primary">下一步</uni-button>
+</uni-app>
+
+<script>
+// 模拟 uni-data-tree 行为：点击触发器打开弹层；搜索过滤出叶子项；点击叶子项选中并关闭
+const TOP_LEVEL = ['人格权纠纷','婚姻家庭、继承纠纷','物权纠纷','合同、准合同纠纷','知识产权与竞争纠纷','侵权责任纠纷'];
+const LEAVES = {
+  '买卖合同纠纷': ['买卖合同纠纷','分期付款买卖合同纠纷','凭样品买卖合同纠纷','试用买卖合同纠纷','所有权保留买卖合同纠纷','招标投标买卖合同纠纷','国际货物买卖合同纠纷','信息网络买卖合同纠纷','房屋买卖合同纠纷','农村房屋买卖合同纠纷','船舶买卖合同纠纷'],
+  '民间借贷纠纷': ['民间借贷纠纷','企业借贷纠纷','金融借款合同纠纷'],
+  '房屋租赁合同纠纷': ['房屋租赁合同纠纷','土地租赁合同纠纷','车辆租赁合同纠纷','融资租赁合同纠纷'],
+  '机动车交通事故责任纠纷': ['机动车交通事故责任纠纷','非机动车交通事故责任纠纷'],
+  '服务合同纠纷': ['服务合同纠纷','技术服务合同纠纷','物业服务合同纠纷']
+};
+
+const tree = document.querySelector('.uni-data-tree');
+const inputValue = tree.querySelector('.input-value');
+const selectedArea = tree.querySelector('.selected-area');
+
+function openDialog() {
+  if (tree.querySelector('.uni-data-tree-dialog')) return;
+  const cover = document.createElement('uni-view');
+  cover.className = 'uni-data-tree-cover';
+  const dialog = document.createElement('uni-view');
+  dialog.className = 'uni-data-tree-dialog open';
+  dialog.innerHTML = `
+    <uni-view class="uni-popper__arrow"></uni-view>
+    <uni-view class="dialog-caption">
+      <uni-view class="title-area"><uni-text class="dialog-title"><span>案由</span></uni-text></uni-view>
+      <uni-view class="dialog-close"><uni-view data-id="close" class="dialog-close-plus"></uni-view></uni-view>
+    </uni-view>
+    <uni-view class="fd-search-container">
+      <uni-input class="fd-search-input"><div class="uni-input-wrapper">
+        <div class="uni-input-placeholder input-placeholder">搜索关键词</div>
+        <input maxlength="140" type="text" class="uni-input-input">
+      </div></uni-input>
+    </uni-view>
+    <uni-view class="uni-data-pickerview picker-view">
+      <uni-view class="tab-c"><uni-scroll-view class="fd-picker-list"><div class="uni-scroll-view-content"></div></uni-scroll-view></uni-view>
+    </uni-view>`;
+  tree.appendChild(cover);
+  tree.appendChild(dialog);
+  renderItems(TOP_LEVEL);
+  const inp = dialog.querySelector('input');
+  inp.addEventListener('input', () => {
+    const kw = inp.value.trim();
+    if (!kw) { renderItems(TOP_LEVEL); return; }
+    const matched = Object.keys(LEAVES).find(k => k.includes(kw) || kw.includes(k));
+    renderItems(matched ? LEAVES[matched].filter(x => x.includes(kw) || kw.includes(x)) : []);
+  });
+  dialog.querySelector('.dialog-close').addEventListener('click', closeDialog);
+}
+
+function renderItems(list) {
+  const content = tree.querySelector('.fd-picker-list .uni-scroll-view-content');
+  content.innerHTML = '';
+  for (const name of list) {
+    const item = document.createElement('uni-view');
+    item.className = 'fd-item';
+    item.innerHTML = `<uni-view class="fd-btn-checkbox"></uni-view><uni-text class="item-text"><span>${name}</span></uni-text>`;
+    item.addEventListener('click', () => selectItem(name));
+    content.appendChild(item);
+  }
+}
+
+function selectItem(name) {
+  // 模拟：搜索出来的都是叶子节点，点击即选中
+  selectedArea.textContent = name;
+  selectedArea.classList.remove('placeholder');
+  selectedArea.setAttribute('title', name);
+  closeDialog();
+}
+
+function closeDialog() {
+  const d = tree.querySelector('.uni-data-tree-dialog');
+  const c = tree.querySelector('.uni-data-tree-cover');
+  if (d) d.remove();
+  if (c) c.remove();
+}
+
+inputValue.addEventListener('click', openDialog);
+</script>
+</body>
+</html>

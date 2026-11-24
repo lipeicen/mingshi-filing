@@ -1,0 +1,70 @@
+[
+  {
+    "case_no": "TEST-2026-XLS-901",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "北京市海淀区人民法院",
+    "court_province": "北京",
+    "case_cause": "民间借贷纠纷",
+    "amount": 50000.0,
+    "claims": "判令被告归还借款50000元及利息。",
+    "facts": "2025年1月被告向原告借款50000元……",
+    "plaintiff": {
+      "name": "张三",
+      "idcard": "110101199001010015",
+      "phone": "13800000001",
+      "address": "北京市海淀区xx路1号"
+    },
+    "defendant": {
+      "name": "李四",
+      "idcard": "110101198502020022",
+      "phone": "13800000002",
+      "address": "北京市朝阳区xx路2号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/uploads/民事起诉状.pdf"
+      },
+      {
+        "name": "张三身份证",
+        "type": "身份证明",
+        "path": "documents/uploads/张三身份证.png"
+      },
+      {
+        "name": "李四身份证",
+        "type": "身份证明",
+        "path": "documents/uploads/李四身份证.png"
+      },
+      {
+        "name": "借款证据材料",
+        "type": "证据",
+        "path": "documents/uploads/借款证据材料.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/uploads/授权委托书.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/uploads/送达地址确认书.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "王律师",
+        "idcard": "110101198003154325",
+        "phone": "13700000003",
+        "type": "执业律师",
+        "license_no": "11101202110456721",
+        "work_unit": "北京大成律师事务所",
+        "principals": [
+          "张三"
+        ]
+      }
+    ]
+  }
+]

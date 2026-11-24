@@ -1,0 +1,342 @@
+[
+  {
+    "case_no": "TEST-2026-MP-201",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "上海市浦东新区人民法院",
+    "court_province": "上海",
+    "case_cause": "买卖合同纠纷",
+    "amount": 76000.0,
+    "claims": "判令被告向原告支付设备货款人民币76000元及逾期付款利息。",
+    "facts": "2025年2月，被告向原告采购检测设备一批，货款共计76000元。原告按约交货并经验收合格，被告以资金周转为由拖延付款，至今未付。",
+    "plaintiff": {
+      "name": "徐文博",
+      "idcard": "110105198011170312",
+      "phone": "13801010021",
+      "address": "北京市朝阳区建国门外大街22号"
+    },
+    "defendant": {
+      "name": "黄志强",
+      "idcard": "110108197709230182",
+      "phone": "13902020021",
+      "address": "北京市海淀区中关村南大街5号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "李睿律师",
+        "idcard": "110102198505200615",
+        "phone": "13703030011",
+        "type": "执业律师",
+        "license_no": "11101202110456721",
+        "work_unit": "北京大成律师事务所",
+        "principals": [
+          "徐文博"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-MP-202",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "广州市天河区人民法院",
+    "court_province": "广东",
+    "case_cause": "民间借贷纠纷",
+    "amount": 200000.0,
+    "claims": "判令被告向原告偿还借款本金人民币200000元及利息。",
+    "facts": "2024年10月，被告以生意周转为由向原告借款200000元，约定2025年4月30日前归还。到期后被告拒不还款，经多次催要无果。",
+    "plaintiff": {
+      "name": "周雅琴",
+      "idcard": "110102197204050620",
+      "phone": "13801010022",
+      "address": "北京市西城区月坛北街9号"
+    },
+    "defendant": {
+      "name": "吴国强",
+      "idcard": "110114196912280567",
+      "phone": "13902020022",
+      "address": "北京市昌平区天通苑北一区3号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "张远律师",
+        "idcard": "110105199103120552",
+        "phone": "13703030012",
+        "type": "执业律师",
+        "license_no": "11101202208765430",
+        "work_unit": "北京盈科律师事务所",
+        "principals": [
+          "周雅琴"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-MP-203",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "杭州市西湖区人民法院",
+    "court_province": "浙江",
+    "case_cause": "房屋租赁合同纠纷",
+    "amount": 42000.0,
+    "claims": "判令被告支付拖欠租金人民币42000元并腾退房屋。",
+    "facts": "2024年5月，原告将名下商铺出租给被告经营，月租金7000元。被告自2025年3月起连续拖欠6个月租金，经催告仍拒不支付。",
+    "plaintiff": {
+      "name": "郑海涛",
+      "idcard": "110106198506300744",
+      "phone": "13801010023",
+      "address": "北京市丰台区南三环西路16号"
+    },
+    "defendant": {
+      "name": "冯丽华",
+      "idcard": "110107199010140282",
+      "phone": "13902020023",
+      "address": "北京市石景山区鲁谷路74号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "孙雅律师",
+        "idcard": "110108199009110269",
+        "phone": "13703030013",
+        "type": "执业律师",
+        "license_no": "11101202309871234",
+        "work_unit": "北京大成律师事务所",
+        "principals": [
+          "郑海涛"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-MP-204",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "成都市武侯区人民法院",
+    "court_province": "四川",
+    "case_cause": "机动车交通事故责任纠纷",
+    "amount": 65000.0,
+    "claims": "判令被告赔偿原告医疗费、误工费等共计人民币65000元。",
+    "facts": "2025年6月18日，被告驾驶轿车在武侯区人民南路与原告车辆追尾，交警认定被告负全责。原告受伤治疗15天，双方协商赔偿未果。",
+    "plaintiff": {
+      "name": "马俊杰",
+      "idcard": "110108199402110935",
+      "phone": "13801010024",
+      "address": "北京市海淀区学院路30号"
+    },
+    "defendant": {
+      "name": "何建军",
+      "idcard": "110109198708090174",
+      "phone": "13902020024",
+      "address": "北京市门头沟区滨河路18号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "李睿律师",
+        "idcard": "110102198505200615",
+        "phone": "13703030011",
+        "type": "执业律师",
+        "license_no": "11101202110456721",
+        "work_unit": "北京大成律师事务所",
+        "principals": [
+          "马俊杰"
+        ]
+      }
+    ]
+  },
+  {
+    "case_no": "TEST-2026-MP-205",
+    "case_type": "民事案件",
+    "court_code": "beijing",
+    "court_name": "天津市和平区人民法院",
+    "court_province": "天津",
+    "case_cause": "服务合同纠纷",
+    "amount": 98000.0,
+    "claims": "判令被告向原告支付咨询服务费人民币98000元及违约金。",
+    "facts": "2024年11月，原告与被告签订《企业管理咨询服务合同》，服务期一年，服务费按季度支付。原告已履约完成全部服务，被告拖欠最后两个季度费用共计98000元。",
+    "plaintiff": {
+      "name": "高志明",
+      "idcard": "110104197803170491",
+      "phone": "13801010025",
+      "address": "北京市西城区宣武门内大街4号"
+    },
+    "defendant": {
+      "name": "曹丽娟",
+      "idcard": "11011119920524086X",
+      "phone": "13902020025",
+      "address": "北京市房山区良乡大街21号"
+    },
+    "documents": [
+      {
+        "name": "民事起诉状",
+        "type": "起诉状",
+        "path": "documents/complaint.pdf"
+      },
+      {
+        "name": "原告身份证明",
+        "type": "身份证明",
+        "path": "documents/plaintiff_id.png"
+      },
+      {
+        "name": "被告身份证明",
+        "type": "身份证明",
+        "path": "documents/defendant_id.png"
+      },
+      {
+        "name": "证据目录",
+        "type": "证据",
+        "path": "documents/evidence_catalog.pdf"
+      },
+      {
+        "name": "授权委托书",
+        "type": "委托书",
+        "path": "documents/authorization.pdf"
+      },
+      {
+        "name": "送达地址确认书",
+        "type": "送达地址确认书",
+        "path": "documents/service_address.pdf"
+      }
+    ],
+    "agents": [
+      {
+        "name": "张远律师",
+        "idcard": "110105199103120552",
+        "phone": "13703030012",
+        "type": "执业律师",
+        "license_no": "11101202208765430",
+        "work_unit": "北京盈科律师事务所",
+        "principals": [
+          "高志明"
+        ]
+      }
+    ]
+  }
+]

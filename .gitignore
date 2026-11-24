@@ -1,0 +1,30 @@
+# ===== 敏感配置 =====
+.env
+*.env
+!.env.example
+!.env.template
+sessions.json
+auth_state.json
+
+# ===== 运行时数据 =====
+app/server/run_logs/
+app/server/api_last_run.log
+app/dev_run.log
+extracted/logs/
+extracted/results/
+extracted/screenshots/
+extracted/documents/uploads/
+extracted/test_data/auth_state.json
+*.log
+
+# ===== 依赖与构建 =====
+node_modules/
+app/dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# ===== 系统 =====
+.DS_Store
+Thumbs.db
+app/server/runs.json

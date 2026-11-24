@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>mock wsla 立案流程</title>
+<style>
+  body { font-family: sans-serif; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .uni-data-tree-dialog { display: none; border: 1px solid #ccc; padding: 10px; width: 480px; background: #fff; }
+  .uni-data-tree-dialog.open { display: block; }
+  .fd-picker-list .fd-item { padding: 6px; cursor: pointer; }
+  .fd-picker-list .fd-item:hover { background: #eaf4ff; }
+  .selected-area.placeholder { color: #999; }
+  .fd-search-container input { width: 200px; }
+  .uni-steps__row-title { margin-right: 12px; color: #999; }
+  .uni-steps__row-title.on { color: #0096ff; font-weight: 700; }
+  uni-button { display: inline-block; background: #0096ff; color: #fff; padding: 8px 24px; cursor: pointer; border-radius: 4px; }
+</style>
+</head>
+<body>
+<uni-app>
+  <!-- 步骤条 -->
+  <uni-view class="uni-steps">
+    <uni-text class="uni-steps__row-title" data-step="1">选择受理法院</uni-text>
+    <uni-text class="uni-steps__row-title" data-step="2">阅读须知</uni-text>
+    <uni-text class="uni-steps__row-title on" data-step="3">选择立案案由</uni-text>
+    <uni-text class="uni-steps__row-title" data-step="4">上传诉讼材料</uni-text>
+  </uni-view>
+
+  <!-- 第2步：阅读须知 -->
+  <uni-view class="page" id="page-notice">
+    <h3>立案须知</h3>
+    <p>（须知内容略）</p>
+  </uni-view>
+
+  <!-- 第3步：选择立案案由 -->
+  <uni-view class="page active" id="page-cause">
+    <uni-view class="fd-com-article"><uni-view class="fd-com-article-title">立案案由</uni-view></uni-view>
+    <uni-view class="fd-com-warning-tip">请您判断您的纠纷符合以下哪个案由类型，并对应选择</uni-view>
+    <uni-view class="uni-data-tree">
+      <uni-view class="uni-data-tree-input">
+        <uni-view class="input-value input-value-border">
+          <uni-view class="selected-area" title="服务合同纠纷">服务合同纠纷</uni-view>
+          <uni-view class="arrow-area"><uni-view class="input-arrow"></uni-view></uni-view>
+        </uni-view>
+      </uni-view>
+    </uni-view>
+    <uni-view class="fd-com-btn-container" id="cause-btn-slot"></uni-view>
+  </uni-view>
+
+  <uni-view class="fd-com-btn-container"><uni-button id="next-btn" data-next="page-upload">下一步</uni-button></uni-view>
+
+  <!-- 第4步：上传诉讼材料 -->
+  <uni-view class="page" id="page-upload">
+    <h3>上传诉讼材料</h3>
+    <p>起诉状 / 身份证明 / 证据材料</p>
+  </uni-view>
+</uni-app>
+
+<script>
+const TOP_LEVEL = ['人格权纠纷','婚姻家庭、继承纠纷','物权纠纷','合同、准合同纠纷','知识产权与竞争纠纷','侵权责任纠纷'];
+const LEAVES = {
+  '买卖合同纠纷': ['买卖合同纠纷','分期付款买卖合同纠纷','凭样品买卖合同纠纷','试用买卖合同纠纷','所有权保留买卖合同纠纷','招标投标买卖合同纠纷','国际货物买卖合同纠纷','信息网络买卖合同纠纷','房屋买卖合同纠纷','农村房屋买卖合同纠纷','船舶买卖合同纠纷'],
+  '民间借贷纠纷': ['民间借贷纠纷','企业借贷纠纷','金融借款合同纠纷'],
+  '房屋租赁合同纠纷': ['房屋租赁合同纠纷','土地租赁合同纠纷','车辆租赁合同纠纷','融资租赁合同纠纷'],
+  '机动车交通事故责任纠纷': ['机动车交通事故责任纠纷','非机动车交通事故责任纠纷'],
+  '服务合同纠纷': ['服务合同纠纷','技术服务合同纠纷','物业服务合同纠纷']
+};
+
+// ---- 步骤导航（模拟必填校验：案由未选不能进入下一步）----
+function gotoStep(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const stepMap = {'page-notice': '2', 'page-cause': '3', 'page-upload': '4'};
+  document.querySelectorAll('.uni-steps__row-title').forEach(t => t.classList.remove('on'));
+  document.querySelector(`.uni-steps__row-title[data-step="${stepMap[id]}"]`).classList.add('on');
+  const nextMap = {'page-notice': 'page-cause', 'page-cause': 'page-upload', 'page-upload': ''};
+  document.getElementById('next-btn').dataset.next = nextMap[id] || '';
+}
+document.getElementById('next-btn').addEventListener('click', () => {
+  const target = document.getElementById('next-btn').dataset.next;
+  if (!target) return;
+  if (target === 'page-upload') {
+    // 模拟服务端校验：案由未选则拦截
+    const area = document.querySelector('.uni-data-tree .selected-area');
+    if (area.classList.contains('placeholder')) { alert('请选择立案案由'); return; }
+  }
+  gotoStep(target);
+});
+
+// ---- uni-data-tree 行为（与真实页面一致）----
+const tree = document.querySelector('.uni-data-tree');
+const inputValue = tree.querySelector('.input-value');
+const selectedArea = tree.querySelector('.selected-area');
+
+function openDialog() {
+  if (tree.querySelector('.uni-data-tree-dialog')) return;
+  const dialog = document.createElement('uni-view');
+  dialog.className = 'uni-data-tree-dialog open';
+  dialog.innerHTML = `
+    <uni-view class="dialog-caption">
+      <uni-view class="title-area"><uni-text class="dialog-title"><span>案由</span></uni-text></uni-view>
+      <uni-view class="dialog-close"><uni-view data-id="close" class="dialog-close-plus"></uni-view></uni-view>
+    </uni-view>
+    <uni-view class="fd-search-container">
+      <uni-input class="fd-search-input"><div class="uni-input-wrapper">
+        <div class="uni-input-placeholder input-placeholder">搜索关键词</div>
+        <input maxlength="140" type="text" class="uni-input-input">
+      </div></uni-input>
+    </uni-view>
+    <uni-view class="uni-data-pickerview picker-view">
+      <uni-view class="tab-c"><uni-scroll-view class="fd-picker-list"><div class="uni-scroll-view-content"></div></uni-scroll-view></uni-view>
+    </uni-view>`;
+  tree.appendChild(dialog);
+  renderItems(TOP_LEVEL);
+  const inp = dialog.querySelector('input');
+  inp.addEventListener('input', () => {
+    const kw = inp.value.trim();
+    if (!kw) { renderItems(TOP_LEVEL); return; }
+    const matched = Object.keys(LEAVES).find(k => k.includes(kw) || kw.includes(k));
+    renderItems(matched ? LEAVES[matched].filter(x => x.includes(kw) || kw.includes(x)) : []);
+  });
+  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.remove());
+}
+function renderItems(list) {
+  const content = tree.querySelector('.fd-picker-list .uni-scroll-view-content');
+  content.innerHTML = '';
+  for (const name of list) {
+    const item = document.createElement('uni-view');
+    item.className = 'fd-item';
+    item.innerHTML = `<uni-view class="fd-btn-checkbox"></uni-view><uni-text class="item-text"><span>${name}</span></uni-text>`;
+    item.addEventListener('click', () => {
+      selectedArea.textContent = name;
+      selectedArea.classList.remove('placeholder');
+      selectedArea.setAttribute('title', name);
+      const d = tree.querySelector('.uni-data-tree-dialog');
+      if (d) d.remove();
+    });
+    content.appendChild(item);
+  }
+}
+inputValue.addEventListener('click', openDialog);
+
+// 初始：阅读须知页
+gotoStep('page-notice');
+</script>
+
+
+</body></html>
