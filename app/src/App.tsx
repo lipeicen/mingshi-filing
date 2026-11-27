@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router';
-import { LayoutDashboard, Files, UploadCloud, PlayCircle, Scale, KeyRound, LogOut } from 'lucide-react';
+import { LayoutDashboard, Files, UploadCloud, PlayCircle, Scale, KeyRound, LogOut, ShieldCheck } from 'lucide-react';
 import { Toaster } from '@/components/ui/sonner';
 import { api, type AdminInfo } from '@/lib/api';
 import Dashboard from './pages/Dashboard';
@@ -9,10 +9,12 @@ import Upload from './pages/Upload';
 import Runs from './pages/Runs';
 import Login from './pages/Login';
 import Accounts from './pages/Accounts';
+import Preserve from './pages/Preserve';
 
 const NAV = [
   { to: '/', label: '概览', icon: LayoutDashboard, end: true },
   { to: '/cases', label: '案件管理', icon: Files },
+  { to: '/preserve', label: '保全案件', icon: ShieldCheck },
   { to: '/upload', label: '数据上传', icon: UploadCloud },
   { to: '/runs', label: '立案运行', icon: PlayCircle },
   { to: '/accounts', label: '账号管理', icon: KeyRound },
@@ -88,6 +90,7 @@ function Shell() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/cases" element={<Cases />} />
+          <Route path="/preserve" element={<Preserve />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/runs" element={<Runs />} />
           <Route path="/accounts" element={<Accounts />} />

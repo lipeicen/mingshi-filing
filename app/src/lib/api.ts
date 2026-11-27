@@ -166,6 +166,53 @@ export interface CourtAccount {
   bound_admins: number;
 }
 
+export interface PreserveCaseRow {
+  id: number;
+  case_no: string;
+  case_name: string;
+  preserve_category: string | null;
+  preserve_amount: number;
+  court_name: string;
+  applicant_name: string;
+  respondent_name: string;
+  guarantee_type: string | null;
+  status: number;
+  status_label: string;
+  property_count: number;
+  file_count: number;
+  created_at: string;
+}
+
+export interface PreserveCaseDetail {
+  case: Record<string, unknown> & { status_label: string };
+  properties: Record<string, unknown>[];
+  files: Record<string, unknown>[];
+  agents: Record<string, unknown>[];
+}
+
+export interface PreservePreviewCase {
+  case_no: string;
+  case_name: string;
+  court_name: string;
+  applicant_name: string;
+  respondent_name: string;
+  preserve_amount: number;
+  guarantee_type: string;
+  properties: number;
+  agents: number;
+  exists: boolean;
+}
+
+export interface PreserveImportResult {
+  ok: boolean;
+  dry?: boolean;
+  cases?: PreservePreviewCase[];
+  created?: string[];
+  updated?: string[];
+  failed?: string[];
+  errors?: string[];
+}
+
 export const api = {
   health: () => req<{ ok: boolean; error?: string }>('/health'),
   stats: () => req<Stats>('/stats'),
@@ -244,4 +291,49 @@ export const api = {
   bindCourtAccount: (id: number) =>
     req<{ ok: boolean; bound_court_user_id: number }>(`/court-accounts/${id}/bind`, { method: 'POST' }),
   unbindCourtAccount: () => req<{ ok: boolean }>('/court-accounts/unbind', { method: 'POST' }),
+  // 保全案件
+  preserveCases: (params: { status?: number; q?: string; page?: number; size?: number }) => {
+    const sp = new URLSearchParams();
+    if (params.status !== undefined && params.status !== null) sp.set('status', String(params.status));
+    if (params.q) sp.set('q', params.q);
+    sp.set('page', String(params.page ?? 1));
+    sp.set('size', String(params.size ?? 20));
+    return req<{ total: number; page: number; size: number; items: PreserveCaseRow[] }>(`/preserve/cases?${sp}`);
+  },
+  preserveCaseDetail: (id: number) => req<PreserveCaseDetail>(`/preserve/cases/${id}`),
+  updatePreserveStatus: (id: number, status: number) =>
+    req<{ ok: boolean }>(`/preserve/cases/${id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    }),
+  startPreserveRun: (caseIds: number[]) =>
+    req<{ ok: boolean; run_id: string; case_nos: string[] }>('/preserve/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_ids: caseIds }),
+    }),
+  importPreserveCases: (file: File, dry = false) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return req<PreserveImportResult>(`/preserve/import${dry ? '?dry=1' : ''}`, { method: 'POST', body: fd });
+  },
+  preserveTemplateUrl: '/preserve/template',
+  // 保全案件材料
+  preserveFileCategories: (id: number) => req<{ categories: string[] }>(`/preserve/cases/${id}/file-categories`),
+  uploadPreserveFiles: (caseId: number, category: string, files: File[]) => {
+    const fd = new FormData();
+    files.forEach((f) => fd.append('files', f));
+    fd.append('category', category);
+    return req<{ ok: boolean; saved: { name: string }[]; rejected: { name: string; reason: string }[] }>(
+      `/preserve/cases/${caseId}/files`, { method: 'POST', body: fd });
+  },
+  deletePreserveFile: (fileId: number) =>
+    req<{ ok: boolean }>(`/preserve/files/${fileId}`, { method: 'DELETE' }),
+  batchPreserveFiles: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return req<{ ok: boolean; results: { case_no: string; count: number }[]; skipped: string[]; total: number }>(
+      '/preserve/files/batch', { method: 'POST', body: fd });
+  },
 };
