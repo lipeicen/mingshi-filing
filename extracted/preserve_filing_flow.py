@@ -93,6 +93,57 @@ def fill_input_by_label(page, label_text, value, input_type='.el-input__inner'):
     result = page.evaluate(js_code)
     return result
 
+def _prop_fill(page1, label, value):
+    """财产弹窗内按 label 填输入框/文本域"""
+    value = str(value or '').strip()
+    if not value:
+        return
+    print(f"输入{label}: {value}...")
+    try:
+        item = page1.locator(".el-form-item").filter(has_text=label)
+        field = item.locator(".el-input__inner, textarea").first
+        field.click()
+        field.fill(value)
+        print("  成功")
+    except Exception as e:
+        print(f"  失败: {e}")
+    time.sleep(0.5)
+
+
+def _prop_select(page1, label, value):
+    """财产弹窗内按 label 操作下拉框（省份等，支持去省市后缀模糊匹配）"""
+    value = str(value or '').strip()
+    if not value:
+        return
+    print(f"选择{label}: {value}...")
+    try:
+        page1.locator(".el-form-item").filter(has_text=label).locator(".el-input__inner").click()
+        time.sleep(1)
+        short = value.replace('省', '').replace('市', '').replace('自治区', '')
+        options = page1.locator(".el-select-dropdown__list li, .el-dropdown-menu__item").all()
+        for option in options:
+            try:
+                text = option.text_content()
+                if text and (value in text or short in text):
+                    option.click()
+                    print(f"  选择成功: {text}")
+                    time.sleep(0.5)
+                    return
+            except Exception:
+                continue
+        page1.get_by_text(value, exact=False).first.click()
+        print("  选择成功(模糊匹配)")
+    except Exception as e:
+        print(f"  失败: {e}")
+    time.sleep(0.5)
+
+
+# 网站上「描述」为必填的财产类型（2026-11-27 探测确认）
+DESC_PROP_TYPES = ('债权', '产品、原材料', '知识产权', '古玩字画', '森林、林木所有权',
+                   '集体土地所有权', '珠宝玉石首饰', '探矿、采矿权', '船舶',
+                   '船载货物', '船用燃料', '船用物料', '留置的货物', '其他')
+
+
 def get_db_connection():
     return pymysql.connect(**DB_CONF)
 
@@ -145,6 +196,14 @@ def load_case_data(case_no):
         case['vehicle_plate_no'] = prop.get('vehicle_plate_no', '')
         case['vehicle_type'] = prop.get('vehicle_type', '')
         case['vehicle_location'] = prop.get('vehicle_location', '')
+        case['vehicle_brand_model'] = prop.get('vehicle_brand_model', '')
+        case['fund_name'] = prop.get('fund_name', '')
+        case['fund_quantity'] = prop.get('fund_quantity', '')
+        case['bond_name'] = prop.get('bond_name', '')
+        case['bond_face_value'] = prop.get('bond_face_value', '')
+        case['property_area'] = prop.get('property_area', '')
+        case['property_area_unit'] = prop.get('property_area_unit', '')
+        case['description'] = prop.get('description', '')
         case['amount'] = prop.get('amount', '')
         case['currency'] = prop.get('currency', '')
         case['mortgage_property_type'] = prop.get('mortgage_property_type', '') or case.get('mortgage_property_type', '')
@@ -1371,8 +1430,8 @@ def add_property(page1):
                 page1.evaluate(f"() => {{ const items = document.querySelectorAll('.el-form-item'); for(let item of items) {{ if(item.textContent.includes('持股数量')) {{ const input = item.querySelector('.el-input__inner'); if(input) {{ input.focus(); input.value = '{stock_qty}'; input.dispatchEvent(new Event('input', {{bubbles:true}})); input.blur(); }} }} }} }}")
             time.sleep(0.5)
     
-    # 存款类型特殊字段
-    if property_type == '存款':
+    # 存款/货币现金类型特殊字段（货币现金无开户行字段，空值守卫自动跳过，仅填数额+币种）
+    if property_type in ('存款', '货币现金'):
         # 开户行所在地 - 下拉框选择
         # 优先使用property_province，其次property_location
         bank_location = CASE_DATA.get('property_province', '') or CASE_DATA.get('property_location', '')
@@ -1597,6 +1656,56 @@ def add_property(page1):
                     page1.evaluate(f"() => {{ const items = document.querySelectorAll('.el-form-item'); for(let item of items) {{ if(item.textContent.includes('车辆具体位置')) {{ const inputs = item.querySelectorAll('input'); for(let input of inputs) {{ if(input.type === 'text') {{ input.focus(); input.value = '{vehicle_location}'; input.dispatchEvent(new Event('input', {{bubbles:true}})); input.blur(); return; }} }} }} }} }}")
             time.sleep(0.5)
     
+    # 基金
+    if property_type == '基金':
+        _prop_select(page1, '发行单位注册地', CASE_DATA.get('stock_reg_location', ''))
+        _prop_fill(page1, '基金名称', CASE_DATA.get('fund_name', ''))
+        _prop_fill(page1, '基金数量', CASE_DATA.get('fund_quantity', ''))
+    # 债券
+    if property_type == '债券':
+        _prop_select(page1, '发行单位注册地', CASE_DATA.get('stock_reg_location', ''))
+        _prop_fill(page1, '债券名称', CASE_DATA.get('bond_name', ''))
+        _prop_fill(page1, '债券面值', CASE_DATA.get('bond_face_value', ''))
+    # 土地使用权（地址=省份下拉+详细地址两个输入；面积文本；单位下拉）
+    if property_type == '土地使用权':
+        land_province = CASE_DATA.get('property_province', '')
+        land_addr = CASE_DATA.get('property_location', '')
+        if land_province or land_addr:
+            try:
+                addr_item = page1.locator(".el-form-item").filter(has_text="地址").first
+                if land_province:
+                    print(f"选择地址省份: {land_province}...")
+                    addr_item.locator(".el-select .el-input__inner").first.click()
+                    time.sleep(1)
+                    short = land_province.replace('省', '').replace('市', '').replace('自治区', '')
+                    picked = False
+                    for option in page1.locator(".el-select-dropdown__list li, .el-dropdown-menu__item").all():
+                        try:
+                            text = option.text_content()
+                            if text and (land_province in text or short in text):
+                                option.click()
+                                print(f"  选择成功: {text}")
+                                picked = True
+                                break
+                        except Exception:
+                            continue
+                    if not picked:
+                        page1.get_by_text(land_province, exact=False).first.click()
+                    time.sleep(0.5)
+                if land_addr:
+                    print(f"输入详细地址: {land_addr}...")
+                    addr_item.locator("input:not([readonly])").first.fill(land_addr)
+                    print("  成功")
+            except Exception as e:
+                print(f"  地址填写失败: {e}")
+            time.sleep(0.5)
+        _prop_fill(page1, '面积', CASE_DATA.get('property_area', ''))
+        _prop_select(page1, '单位', CASE_DATA.get('property_area_unit', '') or '平方米')
+        _prop_fill(page1, '产权证号', CASE_DATA.get('property_cert_no', ''))
+    # 描述类（债权/产品原材料/知识产权等14型）
+    if property_type in DESC_PROP_TYPES:
+        _prop_fill(page1, '描述', CASE_DATA.get('description', ''))
+
     # 输入财产价值
     value = str(CASE_DATA.get('property_value', CASE_DATA.get('preserve_amount', 0)))
     print(f"输入财产价值: {value}...")
