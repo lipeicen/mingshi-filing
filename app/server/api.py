@@ -726,6 +726,10 @@ PRESERVE_TEMPLATE_COLUMNS = [
     ('stock_name', '股票名称', False), ('stock_code', '股票代码', False), ('stock_quantity', '持股数量', False),
     ('stock_reg_location', '发行单位注册地', False), ('stock_company_name', '持股公司名称', False),
     ('stock_ratio', '出资比例', False), ('equipment_name', '设备名称', False),
+    ('property_area', '土地面积', False), ('property_area_unit', '面积单位', False),
+    ('fund_name', '基金名称', False), ('fund_quantity', '基金数量', False),
+    ('bond_name', '债券名称', False), ('bond_face_value', '债券面值', False),
+    ('description', '财产描述', False),
     ('guarantee_type', '担保方式', False), ('guarantee_value', '担保价值', False),
     ('guarantor_name', '担保人姓名', False), ('guarantee_object', '担保物名称', False),
     ('guarantee_property_type', '担保财产类型', False), ('guarantee_remark', '担保备注', False),
@@ -739,24 +743,37 @@ PRESERVE_REQUIRED = ('case_no', 'case_name', 'court_name', 'preserve_amount',
                      'applicant_name', 'applicant_cert_no', 'respondent_name', 'respondent_id',
                      'property_type')
 
-# 各财产类型在法院网站表单上的必填项（缺了自动填写会卡住，导入时先拦住）
-# 注意：「发行单位注册地」「车辆归属地/开户行所在地」等下拉是省级选项，填省份（如 江苏省）
+# 各财产类型在法院网站表单上的专属必填项（2026-11-27 真实登录网站逐类型探测，
+# 见 extracted/results/probe_property_types.json）；「发行单位注册地/车辆归属地/开户行所在地」
+# 等下拉均为省级选项，填省份（如 江苏省）。通用必填（财产类型/所有人/财产价值）不在此列。
 PRESERVE_PROP_REQUIRED = {
-    '存款': ['bank_name', 'bank_account'],
-    '房产': ['property_province', 'property_location'],
-    '股权': ['stock_company_name', 'stock_reg_location', 'stock_ratio'],
-    '股票': ['stock_reg_location', 'stock_name'],
+    '货币现金': [],
+    '存款': ['property_province', 'bank_name', 'bank_account'],
     '交通运输工具': ['property_province', 'vehicle_plate_no'],
     '车辆': ['property_province', 'vehicle_plate_no'],
     '汽车': ['property_province', 'vehicle_plate_no'],
+    '房产': ['property_province'],
+    '土地使用权': ['property_location', 'property_area'],
+    '股票': ['stock_reg_location', 'stock_name'],
+    '基金': ['stock_reg_location', 'fund_name'],
+    '债券': ['stock_reg_location', 'bond_name', 'bond_face_value'],
+    '股权': ['stock_company_name', 'stock_reg_location', 'stock_ratio'],
     '机器设备': ['equipment_name'],
 }
+# 债权 / 产品、原材料 / 知识产权 / 古玩字画 / 森林、林木所有权 / 集体土地所有权 /
+# 珠宝玉石首饰 / 探矿、采矿权 / 船舶 / 船载货物 / 船用燃料 / 船用物料 / 留置的货物 / 其他
+# 上述类型网站均要求填「描述」
+PRESERVE_PROP_DESC_REQUIRED = ('债权', '产品、原材料', '知识产权', '古玩字画', '森林、林木所有权',
+                               '集体土地所有权', '珠宝玉石首饰', '探矿、采矿权', '船舶',
+                               '船载货物', '船用燃料', '船用物料', '留置的货物', '其他')
 
 
 def _check_property_required(rd: dict) -> list[str]:
     """按财产类型校验专属必填项，返回缺失字段的中文表头列表"""
     ptype = rd.get('property_type', '')
     missing = [PRESERVE_HEADER_OF[f] for f in PRESERVE_PROP_REQUIRED.get(ptype, []) if not rd.get(f)]
+    if ptype in PRESERVE_PROP_DESC_REQUIRED and not rd.get('description'):
+        missing.append('财产描述')
     return missing
 
 
@@ -917,7 +934,13 @@ def _preserve_property_fields(case_id: int, rd: dict) -> dict:
         'stock_company_name': rd.get('stock_company_name', ''),
         'stock_ratio': _pnum(rd.get('stock_ratio')),
         'equipment_name': rd.get('equipment_name', ''),
-        'description': '',
+        'property_area': _pnum(rd.get('property_area')),
+        'property_area_unit': rd.get('property_area_unit', '') or ('平方米' if rd.get('property_area') else ''),
+        'fund_name': rd.get('fund_name', ''),
+        'fund_quantity': _pnum(rd.get('fund_quantity')),
+        'bond_name': rd.get('bond_name', ''),
+        'bond_face_value': _pnum(rd.get('bond_face_value')),
+        'description': rd.get('description', ''),
     }
 
 
@@ -998,14 +1021,19 @@ def make_preserve_template() -> bytes:
         ['担保方式', '', '提供保证人 / 设定抵押 / 设定质押 / 交纳保证金；选质押/抵押时填「担保财产类型」'],
         ['币种', '', 'CNY / USD / EUR'],
         ['', '', ''],
-        ['各财产类型的专属必填项', '（网站上为必填，缺失会在自动填写时卡住，导入时会校验拦截）', ''],
-        ['存款', '开户银行、银行账号', '开户行所在地=财产所在省份（省级，如 广东）'],
-        ['房产', '财产所在省份、财产详细地址', '产权证号建议填写'],
-        ['股权', '持股公司名称、发行单位注册地、出资比例', '发行单位注册地是省级下拉，填省份（如 江苏省）；出资比例填数字（15 表示 15%）'],
+        ['各财产类型的专属必填项', '（2026-11 真实登录法院网站逐类型探测，与网站表单的 * 必填一致）', ''],
+        ['货币现金', '数额', '数额留空时默认取保全金额'],
+        ['存款', '财产所在省份（开户行所在地）、开户银行、银行账号', '开户行所在地是省级下拉，填省份，如 广东'],
+        ['交通运输工具', '财产所在省份（车辆归属地）、车牌号', '归属地填省份，如 四川；车牌号如 川A88T66'],
+        ['房产', '财产所在省份（房产坐落位置）', '坐落位置填省份；详细地址、产权证号建议填写'],
+        ['土地使用权', '财产详细地址、土地面积', '面积单位默认 平方米'],
         ['股票', '发行单位注册地（省份）、股票名称', '股票代码、持股数量建议填写'],
-        ['交通运输工具', '财产所在省份（车辆归属地，省级）、车牌号', '车辆位置建议填写，如 川A88T66 / 成都市锦江区XX停车场'],
+        ['基金', '发行单位注册地（省份）、基金名称', '基金数量建议填写'],
+        ['债券', '发行单位注册地（省份）、债券名称、债券面值', ''],
+        ['股权', '持股公司名称、发行单位注册地（省份）、出资比例', '出资比例填数字（15 表示 15%）'],
         ['机器设备', '设备名称', ''],
-        ['其他类型', '无专属必填项', '财产价值默认取保全金额'],
+        ['债权/知识产权/船舶等其他14类', '财产描述', '债权、产品原材料、知识产权、古玩字画、森林林木、集体土地、珠宝玉石、探矿采矿权、船舶、船载货物、船用燃料、船用物料、留置的货物、其他'],
+        ['', '所有类型通用必填：财产类型、财产所有人（默认取被申请人）、财产价值（默认取数额或保全金额）', ''],
         ['', '', ''],
         ['多行说明', '同一案件支持多行：', ''],
         ['', '1. 主行：案件编号非空，填写完整案件信息（含第一条财产线索）', ''],
