@@ -203,6 +203,7 @@ def load_case_data(case_no):
         case['bond_face_value'] = prop.get('bond_face_value', '')
         case['property_area'] = prop.get('property_area', '')
         case['property_area_unit'] = prop.get('property_area_unit', '')
+        case['equipment_name'] = prop.get('equipment_name', '')
         case['description'] = prop.get('description', '')
         case['amount'] = prop.get('amount', '')
         case['currency'] = prop.get('currency', '')
@@ -1666,6 +1667,9 @@ def add_property(page1):
         _prop_select(page1, '发行单位注册地', CASE_DATA.get('stock_reg_location', ''))
         _prop_fill(page1, '债券名称', CASE_DATA.get('bond_name', ''))
         _prop_fill(page1, '债券面值', CASE_DATA.get('bond_face_value', ''))
+    # 机器设备
+    if property_type == '机器设备':
+        _prop_fill(page1, '设备名称', CASE_DATA.get('equipment_name', ''))
     # 土地使用权（地址=省份下拉+详细地址两个输入；面积文本；单位下拉）
     if property_type == '土地使用权':
         land_province = CASE_DATA.get('property_province', '')

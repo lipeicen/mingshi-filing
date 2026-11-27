@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """一次性探测：土地使用权弹窗内每个表单项的全部输入控件（placeholder/readonly/type）"""
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -60,21 +61,27 @@ def main():
                 time.sleep(1)
         if not opened:
             print('未能打开财产弹窗'); return
-        page1.get_by_placeholder('请选择财产类型').click()
-        time.sleep(1)
-        st = page1.evaluate("""(txt) => {
-            const dd = [...document.querySelectorAll('.el-select-dropdown')].find(d => (d.getBoundingClientRect().width > 0 && getComputedStyle(d).display !== 'none'));
-            if (!dd) return 'no-dropdown';
-            const item = [...dd.querySelectorAll('.el-select-dropdown__item')].find(li => li.textContent.trim() === txt);
-            if (!item) return 'no-item';
-            item.click(); return 'ok';
-        }""", '土地使用权')
-        print('选择土地使用权:', st)
-        time.sleep(1.5)
-        fields = page1.evaluate(DUMP_JS)
-        print(json.dumps(fields, ensure_ascii=False, indent=1))
-        out = m.BASE_DIR / 'results' / 'probe_land_detail.json'
-        out.write_text(json.dumps(fields, ensure_ascii=False, indent=1), encoding='utf-8')
+        probe_types = os.environ.get('PROBE_TYPES', '土地使用权').split(',')
+        all_fields = {}
+        for ptype in probe_types:
+            page1.get_by_placeholder('请选择财产类型').click()
+            time.sleep(1)
+            st = page1.evaluate("""(txt) => {
+                const dd = [...document.querySelectorAll('.el-select-dropdown')].find(d => (d.getBoundingClientRect().width > 0 && getComputedStyle(d).display !== 'none'));
+                if (!dd) return 'no-dropdown';
+                const item = [...dd.querySelectorAll('.el-select-dropdown__item')].find(li => li.textContent.trim() === txt);
+                if (!item) return 'no-item';
+                item.click(); return 'ok';
+            }""", ptype)
+            print(f'选择{ptype}:', st)
+            time.sleep(1.5)
+            fields = page1.evaluate(DUMP_JS)
+            all_fields[ptype] = fields
+            reqs = [f['label'] for f in (fields or []) if f['required']]
+            print(f'  [{ptype}] 必填: {reqs}')
+        print(json.dumps(all_fields, ensure_ascii=False, indent=1))
+        out = m.BASE_DIR / 'results' / 'probe_prop_detail.json'
+        out.write_text(json.dumps(all_fields, ensure_ascii=False, indent=1), encoding='utf-8')
         print('已保存:', out)
         browser.close()
 
